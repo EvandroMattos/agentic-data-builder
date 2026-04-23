@@ -48,3 +48,30 @@ if "code" in st.session_state:
 
 st.markdown("---")
 st.caption("AI-powered Data Engineering Agent")
+
+from github_integration.databricks_client import get_latest_run
+import time
+
+if st.button("Check Pipeline Status"):
+    with st.spinner("Checking Databricks job..."):
+        run = get_latest_run()
+
+    if run:
+        state = run["state"]["life_cycle_state"]
+
+        if state == "RUNNING":
+            st.warning("🟡 Pipeline running...")
+
+        elif state == "TERMINATED":
+            result = run["state"].get("result_state")
+
+            if result == "SUCCESS":
+                st.success("🟢 Pipeline succeeded!")
+
+            else:
+                st.error("🔴 Pipeline failed!")
+
+        else:
+            st.info(f"Status: {state}")
+    else:
+        st.error("No runs found")
