@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-End-to-end AI-driven pipeline generation with automated PR creation and CI/CD execution simulating Databricks workflows.
+End-to-end AI-driven pipeline generation with automated PR creation.
 =======
 ## 🌐 Live Demo
 
