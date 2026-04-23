@@ -1,4 +1,4 @@
-name: Run Pipeline
+name: Run Databricks Pipeline
 
 on:
   pull_request:
@@ -10,13 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Simulate Databricks Execution
+      - name: Trigger Databricks Job
         run: |
-          echo "🚀 Starting pipeline execution..."
-          echo "Reading pipeline files..."
-          ls pipelines || echo "No pipelines folder"
-          echo "Executing pipeline..."
-          python pipelines/*.py || echo "Simulation complete"
-          echo "✅ Pipeline execution finished"
+          curl -X POST "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now" \
+          -H "Authorization: Bearer ${{ secrets.DATABRICKS_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+                "job_id": 253320267496450
+              }'
