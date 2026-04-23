@@ -7,9 +7,15 @@ def generate_pipeline(prompt: str):
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You generate PySpark pipelines"},
-            {"role": "user", "content": prompt}
-        ],
+            {
+                "role": "system",
+                "content": "Generate PySpark pipeline. Return only code."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
     )
 
     return response.choices[0].message.content
