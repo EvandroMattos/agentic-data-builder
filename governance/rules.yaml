@@ -1,0 +1,10 @@
+layers:
+  - bronze
+  - silver
+
+naming:
+  prefix: "tbl_"
+
+standards:
+  format: "delta"
+  partition: "date"
