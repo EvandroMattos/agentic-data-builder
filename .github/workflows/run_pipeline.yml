@@ -5,14 +5,18 @@ on:
     types: [closed]
 
 jobs:
-  run-databricks:
+  run:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Run script (mock or real)
+      - name: Simulate Databricks Execution
         run: |
-          echo "Pipeline would run in Databricks here"
+          echo "🚀 Starting pipeline execution..."
+          echo "Reading pipeline files..."
+          ls pipelines || echo "No pipelines folder"
+          echo "Executing pipeline..."
+          python pipelines/*.py || echo "Simulation complete"
+          echo "✅ Pipeline execution finished"

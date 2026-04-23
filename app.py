@@ -1,18 +1,17 @@
 import streamlit as st
 from agent.generator import generate_pipeline
+from github_integration.pr_creator import create_pr
 
 st.set_page_config(page_title="Agentic Data Builder", layout="wide")
 
 st.title("🚀 Agentic Data Builder")
-st.markdown("Generate governed data pipelines using AI")
+st.markdown("Generate production-ready data pipelines using AI")
 
-# Input
 prompt = st.text_area(
     "Describe your pipeline",
     placeholder="Create a pipeline that ingests data from API and builds bronze and silver layers"
 )
 
-# Botão
 if st.button("Generate Pipeline"):
     if prompt:
         with st.spinner("Generating pipeline..."):
@@ -20,19 +19,32 @@ if st.button("Generate Pipeline"):
 
         st.success("Pipeline generated!")
 
-        # Mostrar código
-        st.subheader("Generated Code")
         st.code(code, language="python")
 
-        # Salvar arquivo
-        with open("generated_pipeline.py", "w") as f:
-            f.write(code)
-
-        st.info("Saved as generated_pipeline.py")
-
+        st.session_state["code"] = code
     else:
         st.warning("Please enter a prompt")
 
-# Rodapé
+# Ações após geração
+if "code" in st.session_state:
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Create PR on GitHub"):
+            with st.spinner("Creating PR..."):
+                pr_url = create_pr(st.session_state["code"])
+
+            st.success("PR created successfully!")
+            st.markdown(f"[👉 View PR]({pr_url})")
+
+    with col2:
+        st.download_button(
+            label="Download Pipeline",
+            data=st.session_state["code"],
+            file_name="pipeline.py",
+            mime="text/plain"
+        )
+
 st.markdown("---")
 st.caption("AI-powered Data Engineering Agent")
